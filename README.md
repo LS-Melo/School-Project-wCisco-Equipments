@@ -4,6 +4,8 @@ Cisco Packet Tracer diagram introduced on Cisco physical equipments:
 
 ![Diagram](https://user-images.githubusercontent.com/98745874/163879472-c4213970-247d-4052-b31c-7af41845f88c.PNG)
 
+Diagram of the project made in Cisco Packet Tracer just for illustration and organization, configurations made on the physical Cisco equipment.
+
 Networks: 'ENTA', 'ALFA' and 'BETA' connected to each other through an encrypted tunnel. (Tun 100 & Tun 200)
 
 'ENTA' equipment will be able to make VOIP communications with 'ALFA & BETA' equipment
