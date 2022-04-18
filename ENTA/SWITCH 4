@@ -1,0 +1,20 @@
+spanning-tree mode pvst
+spanning-tree extend system-id
+spanning-tree vlan 30 priority 28672
+
+
+interface FastEthernet0/4
+switchport access vlan 30
+switchport mode access
+
+interface FastEthernet0/5
+switchport mode access
+switchport voice vlan 20
+mls qos trust cos
+
+
+interface FastEthernet0/12
+switchport mode trunk
+
+interface FastEthernet0/13
+switchport mode trunk
