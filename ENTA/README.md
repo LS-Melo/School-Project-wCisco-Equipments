@@ -1,4 +1,4 @@
-![ENTA](https://user-images.githubusercontent.com/98745874/163882740-c742c463-6263-4abf-80f2-49ed682064ea.PNG)
+![ENTA](https://user-images.githubusercontent.com/98745874/163883226-e0f56e12-fc54-4c5f-819d-931b8eb02010.PNG)
 
 Protocols: LACP, VTP & STP
 
