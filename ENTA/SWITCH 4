@@ -13,7 +13,7 @@ switchport voice vlan 20
 mls qos trust cos
 
 
-interface FastEthernet0/12
+interface FastEthernet0/11
 switchport mode trunk
 
 interface FastEthernet0/13
