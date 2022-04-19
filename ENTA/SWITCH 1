@@ -30,5 +30,5 @@ channel-group 1 mode active
 
 
 
-interface FastEthernet0/13
+interface FastEthernet0/15
 switchport mode trunk
