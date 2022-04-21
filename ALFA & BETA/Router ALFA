@@ -26,27 +26,14 @@ no ipv6 cef
 !
 multilink bundle-name authenticated
 !
-!
-!
-!
-!
-!
-!
-!
-!
-!
 voice-card 0
 !         
 crypto pki token default removal timeout 0
 !
 !
-!
-!
 license udi pid CISCO2801 sn FCZ105123FZ
 !
 redundancy
-!
-!
 !
 !
 crypto isakmp policy 10
@@ -63,9 +50,6 @@ crypto map OMAPA 10 ipsec-isakmp
  set peer 1.11.0.1
  set transform-set TRANS
  match address 100
-!
-!
-!
 !
 !
 !
@@ -112,8 +96,6 @@ router eigrp 100
  passive-interface FastEthernet0/0
 !
 !
-router eigrp 300
- network 172.16.11.0 0.0.0.255
 !
 ip forward-protocol nd
 !
@@ -133,21 +115,13 @@ access-list 1 permit 192.168.0.0 0.0.255.255
 access-list 100 permit gre host 1.11.0.2 host 1.11.0.1
 !
 !
-!
-!
-!
-!
 control-plane
-!
-!
 !
 !
 !
 dial-peer voice 1 voip
  destination-pattern 1..
  session target ipv4:1.11.0.1
-!
-!
 !
 !
 telephony-service
