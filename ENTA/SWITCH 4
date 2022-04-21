@@ -25,3 +25,4 @@ channel-group 2 mode active
 interface Port-channel2
  no shutdown
  switchport mode trunk
+
