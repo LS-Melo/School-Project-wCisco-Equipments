@@ -1,10 +1,53 @@
+hostname ALFA
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+dot11 syslog
+ip source-route
+!
+!
 ip dhcp excluded-address 172.16.11.1
 !
 ip dhcp pool VOIP
    network 172.16.11.0 255.255.255.0
-   default-router 172.16.11.1 
-   option 150 ip 172.16.11.1 
-   dns-server 8.8.8.8 
+   default-router 172.16.11.1
+   option 150 ip 172.16.11.1
+   dns-server 8.8.8.8
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+voice-card 0
+!         
+crypto pki token default removal timeout 0
+!
+!
+!
+!
+license udi pid CISCO2801 sn FCZ105123FZ
+!
+redundancy
+!
+!
+!
 !
 crypto isakmp policy 10
  encr aes 256
@@ -14,12 +57,16 @@ crypto isakmp policy 10
 crypto isakmp key Passw0rd address 1.11.0.1
 !
 !
-crypto ipsec transform-set TRANS ah-sha-hmac esp-aes 256 esp-sha-hmac 
+crypto ipsec transform-set TRANS ah-sha-hmac esp-aes 256 esp-sha-hmac
 !
-crypto map OMAPA 10 ipsec-isakmp 
+crypto map OMAPA 10 ipsec-isakmp
  set peer 1.11.0.1
- set transform-set TRANS 
+ set transform-set TRANS
  match address 100
+!
+!
+!
+!
 !
 !
 interface Tunnel100
@@ -36,6 +83,17 @@ interface FastEthernet0/0
  standby 1 ip 172.16.11.254
  standby 1 priority 110
  standby 1 preempt
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface Serial0/1/0
+ no ip address
+ shutdown
+ clock rate 125000
 !
 interface Serial0/1/1
  ip address 1.11.0.2 255.255.255.252
@@ -60,19 +118,36 @@ router eigrp 300
 ip forward-protocol nd
 !
 !
+no ip http server
+no ip http secure-server
 ip nat inside source list 1 interface Serial0/1/1 overload
-ip nat inside source static tcp 172.17.11.2 80 1.11.0.2 80
-ip nat inside source static tcp 172.17.11.2 443 1.11.0.2 443
+ip nat inside source static tcp 172.17.11.2 80 1.11.0.2 80 extendable
+ip nat inside source static tcp 172.17.11.2 443 1.11.0.2 443 extendable
 ip route 172.17.11.0 255.255.255.0 172.16.11.2
 ip route 172.18.11.0 255.255.255.0 172.16.11.2
 !
+logging esm config
 access-list 1 permit 10.0.0.0 0.255.255.255
 access-list 1 permit 172.16.0.0 0.15.255.255
 access-list 1 permit 192.168.0.0 0.0.255.255
 access-list 100 permit gre host 1.11.0.2 host 1.11.0.1
-access-list 100 permit tcp any any eq www
-access-list 100 permit tcp any any eq 443
-access-list 100 permit ip any 1.11.0.0 0.0.0.3
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+dial-peer voice 1 voip
+ destination-pattern 1..
+ session target ipv4:1.11.0.1
+!
+!
 !
 !
 telephony-service
@@ -82,6 +157,7 @@ telephony-service
  auto assign 1 to 10
  max-conferences 4 gain -6
  transfer-system full-consult
+ create cnf-files version-stamp Jan 01 2002 00:00:00
 !
 !
 ephone-dn  1
@@ -90,3 +166,21 @@ ephone-dn  1
 !
 ephone-dn  2
  number 201
+!
+!
+ephone  1
+ device-security-mode none
+ mac-address 108C.CF74.112C
+ type 7911
+ button  1:1
+!
+!         
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+ transport input all
+!
+scheduler allocate 20000 1000
+end
