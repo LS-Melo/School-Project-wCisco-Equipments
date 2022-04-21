@@ -59,3 +59,28 @@ access-list 101 permit gre host 2.11.0.2 host 2.11.0.1
 access-list 101 permit tcp any any eq www
 access-list 101 permit tcp any any eq 443
 access-list 101 permit ip any 2.11.0.0 0.0.0.3
+
+dial-peer voice 2 voip
+ destination-pattern 1..
+ session target ipv4:2.11.0.1
+!
+!
+!
+!
+telephony-service
+ max-ephones 2
+ max-dn 10
+ ip source-address 172.16.11.1 port 2000
+ auto assign 1 to 10
+ max-conferences 4 gain -6
+ transfer-system full-consult
+ create cnf-files version-stamp Jan 01 2002 00:00:00
+!
+!
+ephone-dn  1
+ number 200
+!
+!
+ephone-dn  2
+ number 201
+
