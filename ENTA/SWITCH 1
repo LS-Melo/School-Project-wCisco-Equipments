@@ -1,34 +1,35 @@
-spanning-tree mode pvst
-spanning-tree extend system-id
-spanning-tree vlan 10 priority 24576
+int f0/11
+sw mod trunk
+int f0/12
+sw mod trunk
+int f0/15
+sw mod trunk
+int f0/3
+sw mod trunk
+int f0/4
+sw mod trunk
+
+vtp mode server
+vtp domain enta.pt
+vtp password Passw0rd
+
+vlan 10
+name V10
+vlan 20
+name V20
+vlan 30
+name V30
+exit
+spanning-tree vlan 10 root primary
+
+int range f0/11-12
+no shut
+switchport mode trunk
+channel-protocol lacp
+channel-group 1 mode active
 
 
 interface Port-channel1
-switchport trunk native vlan 90
-switchport mode trunk
+ no shutdown
+ switchport mode trunk
 
-
-interface FastEthernet0/3
-switchport mode trunk
-!
-interface FastEthernet0/4
-switchport mode trunk
-
-
-
-interface FastEthernet0/11
-switchport trunk native vlan 90
-switchport mode trunk
-channel-protocol lacp
-channel-group 1 mode active
-
-interface FastEthernet0/12
-switchport trunk native vlan 90
-switchport mode trunk
-channel-protocol lacp
-channel-group 1 mode active
-
-
-
-interface FastEthernet0/15
-switchport mode trunk
