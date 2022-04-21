@@ -1,3 +1,8 @@
+hostname ciscoasa
+enable password $sha512$5000$PvpfQ1vI53hKhmNVChGhTQ==$ZltRd34SSR0N+9aPavGBOg== pbkdf2
+names
+
+!
 interface GigabitEthernet1/1
  description OUT-ESQ
  bridge-group 1
@@ -19,7 +24,7 @@ interface GigabitEthernet1/4
  description DMZ
  nameif dmz
  security-level 50
- ip address 172.17.11.1 255.255.255.0 
+ ip address 172.17.11.1 255.255.255.0
 !
 interface GigabitEthernet1/5
  description OUT-DIR
@@ -49,17 +54,17 @@ interface Management1/1
  management-only
  nameif management
  security-level 0
- ip address 192.168.15.15 255.255.255.0 
+ ip address 192.168.15.15 255.255.255.0
 !
 interface BVI1
  nameif outside1
  security-level 0
- ip address 172.16.11.2 255.255.255.0 
+ ip address 172.16.11.2 255.255.255.0
 !
 interface BVI2
  nameif inside1
  security-level 100
- ip address 172.18.11.1 255.255.255.0 
+ ip address 172.18.11.1 255.255.255.0
 !
 ftp mode passive
 object network DMZ
@@ -78,9 +83,9 @@ object network PHONE
  subnet 172.18.11.0 255.255.255.0
 object network PHONE-BETA
  subnet 172.18.11.0 255.255.255.0
-access-list INTERNET extended permit ip any any 
-access-list DMZ extended permit ip any any 
-access-list INSIDE extended permit ip any any 
+access-list INTERNET extended permit ip any any
+access-list DMZ extended permit ip any any
+access-list INSIDE extended permit ip any any
 pager lines 24
 mtu outside 1500
 mtu inside 1500
@@ -113,6 +118,9 @@ object network PHONE-BETA
 access-group DMZ in interface dmz
 access-group INTERNET in interface outside1
 access-group INSIDE in interface inside1
+router eigrp 300
+ network 172.17.11.0 255.255.255.0
+!
 route outside1 0.0.0.0 0.0.0.0 172.16.11.1 1
 route outside1 0.0.0.0 0.0.0.0 172.16.11.3 3
 timeout xlate 3:00:00
@@ -140,6 +148,66 @@ ssh key-exchange group dh-group1-sha1
 console timeout 0
 
 dhcpd address 172.18.11.2-172.18.11.4 inside1
-dhcpd option 150 ip 172.16.11.1 interface inside1
 dhcpd dns 8.8.8.8 interface inside1
+dhcpd option 150 ip 172.16.11.1 interface inside1
 dhcpd enable inside1
+!
+threat-detection basic-threat
+threat-detection statistics access-list
+no threat-detection statistics tcp-intercept
+dynamic-access-policy-record DfltAccessPolicy
+!
+class-map inspection_default
+ match default-inspection-traffic
+!             
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map global_policy
+ class inspection_default
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect ip-options
+  inspect netbios
+  inspect rsh
+  inspect rtsp
+  inspect skinny  
+  inspect esmtp
+  inspect sqlnet
+  inspect sunrpc
+  inspect tftp
+  inspect sip  
+  inspect xdmcp
+  inspect dns preset_dns_map
+policy-map type inspect dns migrated_dns_map_2
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map type inspect dns migrated_dns_map_1
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+!
+service-policy global_policy global
+prompt hostname context
+no call-home reporting anonymous
+call-home
+ profile CiscoTAC-1
+  no active
+  destination address http https://tools.cisco.com/its/service/oddce/services/DDCEService
+  destination address email callhome@cisco.com
+  destination transport-method http
+  subscribe-to-alert-group diagnostic
+  subscribe-to-alert-group environment
+  subscribe-to-alert-group inventory periodic monthly
+  subscribe-to-alert-group configuration periodic monthly
+  subscribe-to-alert-group telemetry periodic daily
+Cryptochecksum:f38bdf4d452e1207644d9cbc6d171789
+: end
+
