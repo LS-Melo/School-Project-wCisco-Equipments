@@ -44,8 +44,6 @@ router eigrp 200
  passive-interface FastEthernet0/0
 !
 !
-router eigrp 300
- network 172.16.11.0 0.0.0.255
 !
 ip nat inside source list 1 interface Serial0/1/1 overload
 ip nat inside source static tcp 172.17.11.2 80 2.11.0.2 80
