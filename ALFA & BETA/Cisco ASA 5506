@@ -118,9 +118,7 @@ object network PHONE-BETA
 access-group DMZ in interface dmz
 access-group INTERNET in interface outside1
 access-group INSIDE in interface inside1
-router eigrp 300
- network 172.17.11.0 255.255.255.0
-!
+
 route outside1 0.0.0.0 0.0.0.0 172.16.11.1 1
 route outside1 0.0.0.0 0.0.0.0 172.16.11.3 3
 timeout xlate 3:00:00
